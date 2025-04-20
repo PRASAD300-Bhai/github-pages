@@ -1,0 +1,68 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+import { motion } from "framer-motion";
+
+export default function HotelBookings() {
+  const [location, setLocation] = useState("");
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+  const [results, setResults] = useState([]);
+
+  const handleSearch = () => {
+    const dummyResults = [
+      {
+        name: "Seaside Resort",
+        location: "California",
+        price: "$120/night",
+        image: "https://source.unsplash.com/400x200/?hotel,beach"
+      },
+      {
+        name: "Mountain Inn",
+        location: "Colorado",
+        price: "$90/night",
+        image: "https://source.unsplash.com/400x200/?hotel,mountain"
+      },
+    ];
+    setResults(dummyResults);
+  };
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Hotel Bookings</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6">
+        <Input
+          placeholder="Enter location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+        <Calendar selected={checkIn} onSelect={setCheckIn} />
+        <Calendar selected={checkOut} onSelect={setCheckOut} />
+        <Button onClick={handleSearch}>Search</Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {results.map((hotel, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Card className="rounded-2xl shadow-md overflow-hidden">
+              <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover" />
+              <CardContent>
+                <h2 className="text-xl font-semibold mb-2">{hotel.name}</h2>
+                <p className="text-gray-600">{hotel.location}</p>
+                <p className="text-lg font-bold mt-2">{hotel.price}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
